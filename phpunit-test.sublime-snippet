@@ -13,22 +13,11 @@
 -->
 <snippet>
     <content><![CDATA[
-public function test${1:[testcase-name]}()
-{
-    // ----------------------------------------------------------------
-    // setup your test
-    //
-    // explain your test setup here if needed ...
-
-    // ----------------------------------------------------------------
-    // perform the change
-    //
-    // explain your test here if needed ...
-
-    // ----------------------------------------------------------------
-    // test the results
-    //
-    // explain what you expect to have happened
+/**
+ * @covers ${2:Class::Method}
+ */
+public function test${1:[testcase-name]}() {
+    ${3:\$this->markTestIncomplete('Not yet Implemented');}
 }
 
 ]]></content>
