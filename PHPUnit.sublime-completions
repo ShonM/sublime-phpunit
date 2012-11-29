@@ -5,6 +5,12 @@
     [
             "phpunit",
 
-            { "trigger": "assE", "contents": "\\$this->assertEquals(${1:expected}, ${2:actual});" }
+            { "trigger": "assE",   "contents": "\\$this->assertEquals(${1:expected}, ${2:actual});" },
+            { "trigger": "assT",   "contents": "\\$this->assertTrue(${1:boolean});" },
+            // Legacy assertInstanceOf for phpu 3.4, which we are stuck with.
+            { "trigger": "assIOLegacy",   "contents": "\\$this->assertTrue(${1:instance} instanceof ${2:class});" },
+            { "trigger": "assIO",  "contents": "\\$this->assertInstanceOf('${1:expected}', ${2:actual});" },
+            { "trigger": "assEx",  "contents": "@expectedException ${1:UnexpectedValueException}" },
+            { "trigger": "assExm", "contents": "@expectedExceptionMessage ${1:Enter the error message you expect to see}" }
     ]
 }
