@@ -44,6 +44,11 @@ To use any of the snippets, simply type the name of the snippet, then press the 
 * __phpunit-test__: create a new test method inside your TestCase class
 * __phpunit-testcase__: create a new TestCase class to put your tests inside
 
+Completions
+-----------
+
+This plugin provides completions for all of PHPUnit 3.7's assertions, with tab stops for each parameter.
+
 Contributions Welcome
 ---------------------
 
