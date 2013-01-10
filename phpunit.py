@@ -17,6 +17,7 @@ class Prefs:
         Prefs.folder_exclusions = settings.get('folder_exclusions', [])
         Prefs.max_search_secs = settings.get('max_search_secs', 2)
         Prefs.phpunit_xml_location_hints = settings.get('phpunit_xml_location_hints', [])
+        Prefs.phpunit_test_location_hints = settings.get('phpunit_test_location_hints', [])
         Prefs.phpunit_additional_args = settings.get('phpunit_additional_args', {})
         Prefs.debug = settings.get('debug', 0)
         Prefs.path_to_phpunit = settings.get('path_to_phpunit', False)
@@ -581,17 +582,27 @@ class ActiveView(ActiveFile):
         if classname is None:
             return None
 
+        files_to_find = []
+
+        # Find by filename
+        AvailableFiles.expireSearchResultsCache(True)
+        topFolder = self.top_folder()
+        for suggestedFolder in Prefs.phpunit_test_location_hints:
+            filenameSearch = self.file_name();
+            filenameSearch = filenameSearch.replace('.php', 'Test.php');
+            filenameSearch = filenameSearch.replace(topFolder, topFolder + "/" + suggestedFolder);
+            files_to_find.append(filenameSearch)
+
+        # Find by classname
         classname = classname + 'Test'
         filename = classname + '.php'
-
-        files_to_find = []
         files_to_find.append(filename)
         files_to_find.append(os.path.basename(filename))
 
         debug_msg("Looking for test files: " + ', '.join(files_to_find))
 
         path_to_search = os.path.dirname(self.file_name())
-        path = AvailableFiles.searchUpwardsFor(self.top_folder(), path_to_search, files_to_find)
+        path = AvailableFiles.searchUpwardsFor(topFolder, path_to_search, files_to_find)
         if path is None:
             return None
 
