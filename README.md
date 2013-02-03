@@ -6,7 +6,8 @@ This plugin adds PHPUnit support to Sublime Text 2.
 Installation
 ------------
 
-Use Sublime Text 2's [Package Control](http://wbond.net/sublime_packages/package_control) (Preferences -> Package Control -> Install Package -> PHPUnit) to install this plugin.
+ 1. Clone this repository into your packages directory (Sublime Text 2 -> Preferences -> Browse Packages).
+ 2. If PHPUnit can't be found, add "path_to_phpunit" to your PHPUnit config (Sublime Text 2 -> Package Settings -> PHPUnit -> Settings - User)
 
 PHPUnit Support For Sublime Text 2
 ----------------------------------
