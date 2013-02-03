@@ -1,0 +1,23 @@
+<!--
+    phpunit-test-with-data
+        A time-saving snippet for adding expectations to test cases.
+
+    HOW TO USE
+        This snippet has several tab stops, just keep tabbing till the highlight surrounds
+        the bith you want to change
+
+-->
+<snippet>
+    <content><![CDATA[
+\$${1:objMock}->expects(\$this->${2:once()})
+    ->method('${3:method}')
+${4:    ->with(\$this->${5:equalTo}(${6}))}
+${7:    ->will(\$this->${8:returnValue}(${9}))};
+]]></content>
+    <!-- Optional: Tab trigger to activate the snippet -->
+    <tabTrigger>phpunit-expects</tabTrigger>
+    <!-- Optional: Scope the tab trigger will be active in -->
+    <scope>source.php</scope>
+    <!-- Optional: Description to show in the menu -->
+    <description>Add an expects assertion to your test.</description>
+</snippet>
