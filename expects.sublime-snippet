@@ -1,5 +1,5 @@
 <!--
-    phpunit-test-with-data
+    expects
         A time-saving snippet for adding expectations to test cases.
 
     HOW TO USE
@@ -15,7 +15,7 @@ ${4:    ->with(\$this->${5:equalTo}(${6}))}
 ${7:    ->will(\$this->${8:returnValue}(${9}))};
 ]]></content>
     <!-- Optional: Tab trigger to activate the snippet -->
-    <tabTrigger>phpunit-expects</tabTrigger>
+    <tabTrigger>expects</tabTrigger>
     <!-- Optional: Scope the tab trigger will be active in -->
     <scope>source.php</scope>
     <!-- Optional: Description to show in the menu -->

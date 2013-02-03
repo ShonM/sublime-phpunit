@@ -1,11 +1,11 @@
 <!--
-    phpunit-test
+    test
         A time-saving snippet for adding new tests to your unit test class
 
     HOW TO USE
         In your PHP class, simply type the following:
 
-            phpunit-test<TAB><testcase-name>
+            test<TAB><testcase-name>
 
         Sublime Text will add the new test method to your file, and
         give the method the name that you choose.
@@ -14,15 +14,15 @@
 <snippet>
     <content><![CDATA[
 /**
- * @covers ${2:Class::Method}
+ * ${1:@covers ${2:Class::Method}}
  */
-public function test${1:[testcase-name]}() {
-    ${3:\$this->markTestIncomplete('Not yet Implemented');}
+public function test${3:[testcase-name]}() {
+    ${4:\$this->markTestIncomplete('Not yet Implemented');}
 }
 
 ]]></content>
     <!-- Optional: Tab trigger to activate the snippet -->
-    <tabTrigger>phpunit-test</tabTrigger>
+    <tabTrigger>test</tabTrigger>
     <!-- Optional: Scope the tab trigger will be active in -->
     <scope>source.php</scope>
     <!-- Optional: Description to show in the menu -->
