@@ -17,6 +17,7 @@ class Prefs:
         Prefs.folder_exclusions = settings.get('folder_exclusions', [])
         Prefs.max_search_secs = settings.get('max_search_secs', 2)
         Prefs.phpunit_xml_location_hints = settings.get('phpunit_xml_location_hints', [])
+        Prefs.phpunit_test_location_hints = settings.get('phpunit_test_location_hints', [])
         Prefs.phpunit_additional_args = settings.get('phpunit_additional_args', {})
         Prefs.debug = settings.get('debug', 0)
         Prefs.path_to_phpunit = settings.get('path_to_phpunit', False)
@@ -123,6 +124,8 @@ class OutputView(object):
     def append_data(self, proc, data):
         str = data.decode("utf-8")
         str = str.replace('\r\n', '\n').replace('\r', '\n')
+        str = re.sub('(.*)(\[2K|;\d+m)', '', str)
+        str = re.sub('\[(\d+)m', '', str)
 
         # selection_was_at_end = (len(self.output_view.sel()) == 1
         #  and self.output_view.sel()[0]
@@ -172,6 +175,7 @@ class PhpunitCommand(CommandBase):
         if Prefs.path_to_phpunit is not False:
             args = [Prefs.path_to_phpunit]
         else:
+            # find where PHPUnit is installed
             args = ["phpunit"]
 
         # Add the additional arguments from the settings file to the command
@@ -495,6 +499,9 @@ class ActiveFile:
     def cannot_find_tested_file(self):
         return "Cannot find file to be tested"
 
+    def not_in_project(self):
+        return "Only works if you have a ST2 project open"
+
     def not_php_file(self, syntax):
         debug_msg(syntax)
         matches = re.search("/([^/]+).tmLanguage", syntax)
@@ -517,6 +524,12 @@ class ActiveView(ActiveFile):
             return True
         # if we get here, we're not sure what else to try
         debug_msg("Buffer is not a PHP buffer; extension is: " + ext + "; syntax is: " + self.view.settings().get('syntax'))
+        return False
+
+    def has_project_open(self):
+        folders = self.view.window().folders()
+        if folders:
+            return True
         return False
 
     def file_name(self):
@@ -565,20 +578,31 @@ class ActiveView(ActiveFile):
     def find_test_file(self):
         debug_msg("Looking for test file")
         classname = self.determine_full_class_name()
+        debug_msg("classname is: " + classname)
         if classname is None:
             return None
 
+        files_to_find = []
+
+        # Find by filename
+        AvailableFiles.expireSearchResultsCache(True)
+        topFolder = self.top_folder()
+        for suggestedFolder in Prefs.phpunit_test_location_hints:
+            filenameSearch = self.file_name();
+            filenameSearch = filenameSearch.replace('.php', 'Test.php');
+            filenameSearch = filenameSearch.replace(topFolder, topFolder + "/" + suggestedFolder);
+            files_to_find.append(filenameSearch)
+
+        # Find by classname
         classname = classname + 'Test'
         filename = classname + '.php'
-
-        files_to_find = []
         files_to_find.append(filename)
         files_to_find.append(os.path.basename(filename))
 
         debug_msg("Looking for test files: " + ', '.join(files_to_find))
 
         path_to_search = os.path.dirname(self.file_name())
-        path = AvailableFiles.searchUpwardsFor(self.top_folder(), path_to_search, files_to_find)
+        path = AvailableFiles.searchUpwardsFor(topFolder, path_to_search, files_to_find)
         if path is None:
             return None
 
@@ -606,13 +630,13 @@ class ActiveView(ActiveFile):
             return line[10:-1]
 
     def extract_classname(self):
-        classes = self.view.find_all("class [A-Za-z0-9_]+")
-        if classes is None or len(classes) == 0:
-            return None
-        for classname in classes:
-            line = self.view.substr(classname)
-            return line[6:]
-
+        # Look for any classes in the current window
+        class_regions = self.view.find_by_selector('entity.name.type.class')
+        for r in class_regions:
+            # return the first class we find
+            return self.view.substr(r)
+        # If we get here, then there are no classes in the current window
+        return None
 
 class ActiveWindow(ActiveFile):
     def file_name(self):
@@ -693,6 +717,8 @@ class PhpunitTestThisClass(PhpunitTextBase):
         return True
 
     def is_visible(self):
+        if not self.has_project_open():
+            return False
         if not self.is_php_buffer():
             return False
         if self.is_test_buffer() or self.is_tests_buffer():
@@ -732,6 +758,8 @@ class PhpunitOpenTestClass(PhpunitTextBase):
         return True
 
     def is_visible(self):
+        if not self.has_project_open():
+            return False
         if not self.is_php_buffer():
             return False
         if self.is_test_buffer() or self.is_tests_buffer():
@@ -771,6 +799,8 @@ class PhpunitOpenClassBeingTested(PhpunitTextBase):
         return True
 
     def is_visible(self):
+        if not self.has_project_open():
+            return False
         if not self.is_php_buffer():
             return False
         if not self.is_test_buffer():
@@ -803,6 +833,8 @@ class PhpunitOpenPhpunitXml(PhpunitTextBase):
         return 'Open phpunit.xml'
 
     def is_enabled(self):
+        if not self.has_project_open():
+            return False
         if not self.is_php_buffer():
             return False
         if self.is_phpunitxml():
@@ -835,6 +867,8 @@ class PhpunitRunThisPhpunitXmlCommand(PhpunitTextBase):
         return self.is_visible()
 
     def is_visible(self):
+        if not self.has_project_open():
+            return False
         return self.is_phpunitxml()
 
     def description(self, paths=[]):
@@ -869,6 +903,8 @@ class PhpunitRunTheseTestsCommand(PhpunitTextBase):
         return True
 
     def is_visible(self):
+        if not self.has_project_open():
+            return False
         if not self.is_php_buffer():
             return False
         if not self.is_test_buffer() and not self.is_tests_buffer():
@@ -895,6 +931,8 @@ class PhpunitRunAllTestsCommand(PhpunitTextBase):
         return 'Run All Unit Tests...'
 
     def is_enabled(self):
+        if not self.has_project_open():
+            return False
         if not self.is_php_buffer():
             return False
         if self.is_phpunitxml():
@@ -918,6 +956,8 @@ class PhpunitRunAllTestsCommand(PhpunitTextBase):
 
 class PhpunitNotAvailableCommand(PhpunitTextBase):
     def is_visible(self):
+        if not self.has_project_open():
+            return True
         if self.is_php_buffer():
             return False
         if self.is_phpunitxml():
@@ -928,6 +968,8 @@ class PhpunitNotAvailableCommand(PhpunitTextBase):
         return False
 
     def description(self):
+        if not self.has_project_open():
+            return self.not_in_project()
         if not self.is_php_buffer():
             return self.not_php_file(self.view.settings().get('syntax'))
         return self.cannot_find_xml()
