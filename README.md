@@ -41,49 +41,45 @@ We add the following snippets to speed up writing PHP test code.
 
 To use any of the snippets, simply type the name of the snippet, then press the <TAB> key.  Sublime Text 2 will insert the snippet, and you can then use the <TAB> key to move through any placeholders that you need to replace.
 
-* __phpunit-test__: create a new test method inside your TestCase class
-* __phpunit-testcase__: create a new TestCase class to put your tests inside
-
-Completions
------------
-
-- **assahk** `assertArrayHasKey()`
-- **assae** `assertAttributeEquals()`
-- **asscha** `assertClassHasAttribute()`
-- **asschsa** `assertClassHasStaticAttribute()`
-- **assc** `assertContains()`
-- **assco** `assertContainsOnly()`
-- **asscu** `assertCount()`
-- **asse** `assertEquals()`
-- **assem** `assertEmpty()`
-- **assexml** `assertEqualXMLStructure()`
-- **assf** `assertFalse()`
-- **assfe** `assertFileEquals()`
-- **assfx** `assertFileExists()`
-- **assgt** `assertGreatherThan()`
-- **assgte** `assertGreaterThanOrEqual()`
-- **assio** `assertInstanceOf()`
-- **assit** `assertInternalType()`
-- **asslt** `assertLessThan()`
-- **asslte** `assertLessThanOrEqual()`
-- **assnn** `assertNotNull()`
-- **assn** `assertNull()`
-- **assoha** `assertObjectHasAttribute()`
-- **assre** `assertRegExp()`
-- **asss** `assertSame()`
-- **asssc** `assertSelectCount()`
-- **assse** `assertSelectEquals()`
-- **asssef** `assertStringEqualsFile()`
-- **asssew** `assertStringEndsWith()`
-- **asssmf** `assertStringMatchesFormat()`
-- **asssmff** `assertStringMatchesFormatFile()`
-- **asssre** `assertSelectRegExp()`
-- **assssw** `assertStringStartsWith()`
-- **asst** `assertTrue()`
-- **assta** `assertTag()`
-- **assxmlfef** `assertXmlFileEqualsXmlFile()`
-- **assxmlsef** `assertXmlStringEqualsXmlFile()`
-- **assxmlses** `assertXmlStringEqualsXmlString()`
+- **phpunit-test**: create a new test method inside your TestCase class
+- **phpunit-testcase**: create a new TestCase class to put your tests inside
+- **assahk**: `assertArrayHasKey()`
+- **assae**: `assertAttributeEquals()`
+- **asscha**: `assertClassHasAttribute()`
+- **asschsa**: `assertClassHasStaticAttribute()`
+- **assc**: `assertContains()`
+- **assco**: `assertContainsOnly()`
+- **asscu**: `assertCount()`
+- **asse**: `assertEquals()`
+- **assem**: `assertEmpty()`
+- **assexml**: `assertEqualXMLStructure()`
+- **assf**: `assertFalse()`
+- **assfe**: `assertFileEquals()`
+- **assfx**: `assertFileExists()`
+- **assgt**: `assertGreatherThan()`
+- **assgte**: `assertGreaterThanOrEqual()`
+- **assio**: `assertInstanceOf()`
+- **assit**: `assertInternalType()`
+- **asslt**: `assertLessThan()`
+- **asslte**: `assertLessThanOrEqual()`
+- **assnn**: `assertNotNull()`
+- **assn**: `assertNull()`
+- **assoha**: `assertObjectHasAttribute()`
+- **assre**: `assertRegExp()`
+- **asss**: `assertSame()`
+- **asssc**: `assertSelectCount()`
+- **assse**: `assertSelectEquals()`
+- **asssef**: `assertStringEqualsFile()`
+- **asssew**: `assertStringEndsWith()`
+- **asssmf**: `assertStringMatchesFormat()`
+- **asssmff**: `assertStringMatchesFormatFile()`
+- **asssre**: `assertSelectRegExp()`
+- **assssw**: `assertStringStartsWith()`
+- **asst**: `assertTrue()`
+- **assta**: `assertTag()`
+- **assxmlfef**: `assertXmlFileEqualsXmlFile()`
+- **assxmlsef**: `assertXmlStringEqualsXmlFile()`
+- **assxmlses**: `assertXmlStringEqualsXmlString()`
 
 Contributions Welcome
 ---------------------
